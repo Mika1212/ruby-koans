@@ -63,6 +63,45 @@ def score(dice)
   result
 end
 
+def score_modified(dice)
+  result = 0
+  hash = Hash.new
+  left_dices = 0
+  for num in dice
+    if hash[num] != nil
+      hash[num] += 1
+    else
+      hash[num] = 1
+    end
+  end
+
+  for key, value in hash
+    if key == 1
+      if value >= 3
+        result += 1000
+        value -= 3
+      end
+      result += value * 100
+      value = 0
+
+    elsif key == 5
+      if value >= 3
+        result += 500
+        value -= 3
+      end
+      result += value * 50
+      value = 0
+
+    elsif value >= 3
+      value -= 3
+      result += key * 100
+    end
+    left_dices += value
+  end
+
+  [result, left_dices]
+end
+
 class AboutScoringProject < Neo::Koan
   def test_score_of_an_empty_list_is_zero
     assert_equal 0, score([])
